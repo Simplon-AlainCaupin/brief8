@@ -31,9 +31,7 @@ steps:
   inputs:
     script: |
       git clone https://github.com/Simplon-AlainCaupin/azure-voting-app-redis
-      ls -lrt
       pushd azure-voting-app-redis
-      ls -lrt
 
 - task: Docker@2
   inputs:
