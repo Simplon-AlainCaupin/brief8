@@ -33,4 +33,3 @@ steps:
       ls -lrt
       pushd azure-voting-app-redis
       ls -lrt
-  name: 'bashscript'
