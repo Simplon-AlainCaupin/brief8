@@ -27,13 +27,11 @@ steps:
     arguments: 'deployments'
   name: "kube"
 
-#- task: CmdLine@2
-#  inputs:
-#    script: |
-#      git clone https://github.com/Simplon-AlainCaupin/azure-voting-app-redis
-#      ls -lrt
-#      pushd azure-voting-app-redis
-#      ls -lrt
+- task: CmdLine@2
+  inputs:
+    script: |
+      git clone https://github.com/Simplon-AlainCaupin/azure-voting-app-redis
+      pushd azure-voting-app-redis
 
 - task: Docker@2
   inputs:
