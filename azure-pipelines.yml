@@ -31,4 +31,6 @@ steps:
     script: |
       git clone https://github.com/Simplon-AlainCaupin/azure-voting-app-redis
       ls -lrt
+      pushd azure-voting-app-redis
+      ls -lrt
   name: 'bashscript'
