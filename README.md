@@ -34,3 +34,10 @@ kubectl apply -f . -n qal
 ```
 
 
+az aks create -n akslain -g brief8lain --network-plugin azure --node-count 2 -a ingress-appgw --appgw-name appgwlain --appgw-subnet-cidr "10.225.0.0/16" --generate-ssh-keys
+
+az aks get-credentials --resource-group brief8lain --name akslain –admin
+
+Subscription Id : a1f74e2d-ec58-4f9a-a112-088e3469febb
+
+az aks get-credentials --resource-group brief8lain --name akslain --file kubeconfig
