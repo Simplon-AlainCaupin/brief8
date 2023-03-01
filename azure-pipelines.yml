@@ -1,15 +1,43 @@
 trigger:
+
 - main
 
 #CRON à modifier suivant récurrence voulue
 
-schedules:
-- cron: "0 18 1 1 *"
-  displayName: repetition
-  branches:
-    include:
-    - main
-  always: true
+#schedules:
+#- cron: "0 18 1 1 *"
+#  displayName: repetition
+#  branches:
+#    include:
+#    - main
+#  always: true
 
 pool:
   vmImage: ubuntu-latest
+
+# Lien vers service connection :
+
+steps:
+- task: Kubernetes@1
+  inputs:
+    connectionType: 'Kubernetes Service Connection'
+    kubernetesServiceEndpoint: 'aks-connection'
+    namespace: 'default'
+    command: 'get'
+    arguments: 'deployments'
+  name: "kube"
+
+- task: CmdLine@2
+  inputs:
+    script: |
+      git clone https://github.com/Simplon-AlainCaupin/azure-voting-app-redis
+      ls -lrt
+      pushd azure-voting-app-redis
+      ls -lrt
+
+- task: Docker@2
+  inputs:
+    containerRegistry: 'container-connection'
+    repository: 'docker/alaincpn'
+    command: 'buildAndPush'
+    Dockerfile: '**/Dockerfile'
