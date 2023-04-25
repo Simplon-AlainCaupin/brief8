@@ -8,7 +8,7 @@ spec:
   selector:
     matchLabels:
       app: appvotetag
-  replicas: 1
+  replicas: 2
   template:
     metadata:
       labels:
@@ -19,10 +19,10 @@ spec:
         image: simplonasa/azure_voting_app:{{ version }}
         resources:
           requests:
-            cpu: 100m
+            cpu: 250m
             memory: 128Mi
           limits:
-            cpu: 250m
+            cpu: 500m
             memory: 256Mi
         ports:
         - containerPort: 80
@@ -37,32 +37,26 @@ spec:
         - name: STRESS_SECS
           value: "2"
 ---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: autoscalevoteapp
+spec:
+  maxReplicas: 8
+  minReplicas: 2
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: voteapp
+  targetCPUUtilizationPercentage: 70
+---
 apiVersion: v1
 kind: Service
 metadata:
-  name: appvotetag
+  name: lbappvote
 spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
   selector:
     app: appvotetag
-  ports:
-  - protocol: TCP
-    port: 80
-    targetPort: 80
----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: appvotetag
-  annotations:
-    kubernetes.io/ingress.class: azure/application-gateway
-spec:
-  rules:
-  - http:
-      paths:
-      - path: /
-        backend:
-          service:
-            name: appvotetag
-            port:
-              number: 80
-        pathType: Exact
